@@ -1,81 +1,168 @@
+<div align="center">
+
 # ⚛️ PhysicsGPT
 
-Asisten belajar fisika berbasis AI, dibangun dengan Streamlit dan Groq API
-(model Llama 3.3 70B). Mendukung banyak topik fisika, beberapa mode belajar
-(jelaskan konsep, selesaikan soal, buat kuis, ringkas materi), serta riwayat
-chat yang tersimpan.
+**AI-powered physics learning assistant built with Streamlit and Groq**
 
-## ⚠️ Sebelum mulai — soal keamanan API key
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Live%20App-FF4B4B?logo=streamlit&logoColor=white)](https://share.streamlit.io)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Groq](https://img.shields.io/badge/Powered%20by-Groq-00A67E)](https://groq.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Proyek ini pernah menyertakan file `.env` berisi API key Groq asli. **Jika kamu
-pernah membagikan folder proyek ini (termasuk sebagai file zip) ke pihak lain,
-segera rotate/revoke key tersebut di https://console.groq.com/keys dan buat
-key baru.** File `.env` sudah ada di `.gitignore` sehingga aman dari git,
-tapi tidak otomatis aman dari zip/share manual.
+[Demo](#-demo) · [Features](#-features) · [Getting Started](#-getting-started) · [Deployment](#-deployment) · [Roadmap](#-roadmap)
 
-## 1. Setup Lokal
+</div>
 
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
+---
 
-# 2. Buat file .env dari template
-cp .env.example .env
-# lalu edit .env dan isi GROQ_API_KEY dengan key kamu
+## 📖 About
 
-# 3. Jalankan aplikasi
-streamlit run app.py
-```
+**PhysicsGPT** is a conversational AI assistant focused exclusively on physics
+education. It combines topic-aware context, multiple learning modes, and a
+symbolic formula solver to help students understand concepts and solve
+problems step by step — powered by Llama 3.3 70B via the Groq API for
+fast inference.
 
-## 2. Struktur Proyek
+## 🎬 Demo
+
+> 🔗 **Live app:** _add your Streamlit Cloud URL here after deploying_
+
+<!--
+Add a screenshot or GIF once deployed, e.g.:
+![PhysicsGPT screenshot](assets/screenshot.png)
+-->
+
+## ✨ Features
+
+- 💬 **Contextual physics chat** — ask questions and get answers in Bahasa Indonesia, grounded in accurate physics concepts
+- 📚 **6 physics topics** — Mechanics, Electricity, Magnetism, Thermodynamics, Optics, and Modern Physics, each with tailored context
+- 🧠 **5 learning modes** — adapt how the AI responds:
+  | Mode | Behavior |
+  |---|---|
+  | Normal Chat | Free-form conversation |
+  | Explain Concept | Structured concept breakdown with formulas & examples |
+  | Solve Problem | Step-by-step problem solving (Known → Asked → Formula → Solution → Answer) |
+  | Generate Quiz | Auto-generates multiple-choice practice questions |
+  | Summarize Material | Condensed study summaries |
+- 🧪 **Physics Formula Solver** — symbolic solver (via SymPy) that can rearrange any of ~15 common physics formulas to solve for whichever variable is unknown
+- 📜 **Chat history** — conversations are saved locally and can be revisited from the sidebar
+- ⚙️ **Configurable model & temperature** — swap models or tune response creativity via `config/settings.py`
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| UI / Frontend | [Streamlit](https://streamlit.io/) |
+| LLM Inference | [Groq API](https://groq.com/) (Llama 3.3 70B) |
+| Symbolic Math | [SymPy](https://www.sympy.org/) |
+| Storage | Local JSON (`data/history.json`) |
+| Config | `python-dotenv` |
+
+## 📂 Project Structure
 
 ```
 PhysicsGPT/
-├── app.py                     # Entry point Streamlit
+├── app.py                       # Main entry point (chat interface)
+├── pages/
+│   └── 1_Formula_Solver.py      # Physics Formula Solver page
 ├── components/
-│   └── sidebar.py              # UI sidebar (topik, mode, riwayat chat)
+│   └── sidebar.py                # Sidebar UI (topics, modes, chat history)
 ├── config/
-│   └── settings.py             # Load .env & konfigurasi model
+│   └── settings.py               # Environment & model configuration
 ├── data/
-│   └── history.json            # Penyimpanan riwayat chat (JSON lokal)
+│   └── history.json              # Local chat history storage
 ├── prompts/
-│   ├── physics_prompt.py       # System prompt utama PhysicsGPT
-│   ├── topics.py                # Konteks per topik fisika
-│   └── modes.py                  # Instruksi per mode belajar
+│   ├── physics_prompt.py         # Core system prompt
+│   ├── topics.py                  # Per-topic context
+│   └── modes.py                    # Per-mode instructions
 ├── services/
-│   ├── groq_service.py         # Wrapper pemanggilan Groq API
-│   └── history_service.py      # CRUD riwayat chat (JSON)
+│   ├── groq_service.py           # Groq API wrapper
+│   └── history_service.py        # Chat history CRUD
 ├── utils/
-│   └── prompt_builder.py       # Menggabungkan system prompt + topik + mode
-├── .env.example                 # Template variabel lingkungan
+│   ├── prompt_builder.py         # Combines prompt + topic + mode
+│   └── physics_formulas.py       # Formula database & solver engine
+├── .env.example                   # Environment variable template
 └── requirements.txt
 ```
 
-## 3. Deploy ke Streamlit Community Cloud
+## 🚀 Getting Started
 
-1. Push folder ini ke GitHub (pastikan `.env` **tidak** ikut ter-push —
-   sudah otomatis diabaikan lewat `.gitignore`).
-2. Buka [share.streamlit.io](https://share.streamlit.io) → **New app**,
-   pilih repo dan file utama `app.py`.
-3. Di **Advanced settings → Secrets**, tambahkan:
+### Prerequisites
+
+- Python 3.10+
+- A free [Groq API key](https://console.groq.com/keys)
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/arikosetyawan00/PhysicsGPT.git
+cd PhysicsGPT
+
+# 2. Create a virtual environment
+python -m venv venv
+venv\Scripts\activate      # Windows
+# source venv/bin/activate # macOS/Linux
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Configure your API key
+cp .env.example .env
+# then edit .env and set GROQ_API_KEY=your_key_here
+
+# 5. Run the app
+streamlit run app.py
+```
+
+The app will open at `http://localhost:8501`.
+
+## ☁️ Deployment
+
+This app is designed to deploy for free on **[Streamlit Community Cloud](https://share.streamlit.io)**:
+
+1. Push this repository to GitHub (already done ✅)
+2. Go to [share.streamlit.io](https://share.streamlit.io) → **New app**
+3. Select this repository, branch `main`, main file `app.py`
+4. Under **Advanced settings → Secrets**, add:
    ```toml
-   GROQ_API_KEY = "gsk_xxxxxxxxxxxxxxxxxxxxxxxx"
+   GROQ_API_KEY = "your_groq_api_key_here"
    ```
-4. Update `config/settings.py` agar juga bisa membaca dari `st.secrets`
-   sebagai fallback (opsional, berguna karena Streamlit Cloud tidak
-   membaca file `.env`):
-   ```python
-   import streamlit as st
-   GROQ_API_KEY = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
-   ```
-5. Klik **Deploy**.
+5. Click **Deploy**
 
-## 4. Catatan
+> ⚠️ **Security note:** never commit real API keys to this repository.
+> `.env` is git-ignored — only `.env.example` (with a placeholder) should
+> ever be committed. Streamlit Cloud reads secrets from its own **Secrets**
+> panel, not from `.env`.
 
-- `data/history.json` bersifat lokal per-instance. Di Streamlit Cloud,
-  penyimpanan ini akan reset saat aplikasi di-redeploy/restart karena
-  filesystem-nya sementara (ephemeral). Untuk penyimpanan permanen,
-  pertimbangkan database eksternal (mis. Supabase/SQLite dengan volume
-  persisten).
-- Model AI diatur di `config/settings.py` (`MODEL_NAME`). Daftar model
-  Groq terbaru bisa dicek di https://console.groq.com/docs/models.
+## 🗺️ Roadmap
+
+- [x] Core chat with topic & mode selection
+- [x] Physics Formula Solver
+- [ ] 📈 Learning Progress tracking
+- [ ] 📝 Exam Mode with scoring & timer
+- [ ] 📄 PDF Learning (upload material as context)
+- [ ] 🧠 RAG Knowledge Base
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome. Feel free to check
+the [issues page](https://github.com/arikosetyawan00/PhysicsGPT/issues) or
+open a pull request.
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE)
+file for details.
+
+## 🙏 Acknowledgments
+
+- [Groq](https://groq.com/) for fast LLM inference
+- [Streamlit](https://streamlit.io/) for the app framework
+- [SymPy](https://www.sympy.org/) for symbolic math
+
+---
+
+<div align="center">
+Made with ⚛️ by <a href="https://github.com/arikosetyawan00">arikosetyawan00</a>
+</div>
