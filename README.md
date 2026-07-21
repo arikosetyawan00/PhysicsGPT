@@ -25,7 +25,7 @@ fast inference.
 
 ## 🎬 Demo
 
-> 🔗 **Live app:** _add your Streamlit Cloud URL here after deploying_
+> 🔗 **Live app:** _https://physicsgpt.streamlit.app/_
 
 <!--
 Add a screenshot or GIF once deployed, e.g.:
